@@ -1,56 +1,59 @@
 package com.inatec.api.test.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.jbehave.core.annotations.AsParameters;
 
 /**
  * @author Anatoly Chernysh
  */
-@Data
 @AsParameters
+@Data
+@AllArgsConstructor
 public class AuthorizeRequest {
 
-    private final String merchantid;
+    private String merchantid;
 
-    private final String amount;
+    private String amount;
 
-    private final String currency;
+    private String currency;
 
-    private final String orderid;
+    private String orderid;
 
-    private final String language;
+    private String language;
 
-    private final String gender;
+    private String gender;
 
-    private final String lastname;
+    private String lastname;
 
-    private final String street;
+    private String street;
 
-    private final String zip;
+    private String zip;
 
-    private final String city;
+    private String city;
 
-    private final String country;
+    private String country;
 
-    private final String firstname;
+    private String firstname;
 
-    private final String company;
+    private String company;
 
-    private final String email;
+    private String email;
 
-    private final String customerip;
+    private String customerip;
 
-    private final String payment_method;
+    private String payment_method;
 
-    private final String ccn;
+    private String ccn;
 
-    private final String cvc_code;
+    private String cvc_code;
 
-    private final String cardholder_name;
+    private String cardholder_name;
 
-    private final String exp_month;
+    private String exp_month;
 
-    private final String exp_year;
+    private String exp_year;
 
-    private final String custom1;
+    private String custom1;
+
 }

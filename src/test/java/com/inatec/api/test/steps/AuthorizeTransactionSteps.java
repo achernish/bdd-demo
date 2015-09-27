@@ -1,10 +1,15 @@
 package com.inatec.api.test.steps;
 
+import com.inatec.api.test.model.AuthorizeRequest;
+import com.inatec.api.test.model.Response;
 import com.inatec.api.test.service.InatecCreditCardAPI;
 import com.inatec.api.test.service.InatecCreditCardAPIImpl;
-import com.inatec.api.test.model.Response;
+import org.jbehave.core.annotations.Given;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
+import org.jbehave.core.steps.Steps;
+
+import java.util.List;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -12,9 +17,18 @@ import static org.junit.Assert.assertThat;
 /**
  * @author Anatoly Chernysh
  */
-public class AuthorizeTransactionSteps extends AbstractSteps {
+public class AuthorizeTransactionSteps extends Steps {
 
     private Response response;
+
+    protected AuthorizeRequest authorizeRequest;
+
+    @Given("a transaction: $transactions")
+    public void givenTransaction(List<AuthorizeRequest> transactions) {
+        this.authorizeRequest = transactions.get(0);
+        //this.authorizeRequest.setCustom1("123456");
+    }
+
 
     @When("authorize")
     public void whenAuthorize() {
