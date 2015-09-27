@@ -2,6 +2,7 @@ package com.inatec.api.test.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.jbehave.core.annotations.AsParameters;
 
 /**
@@ -10,6 +11,7 @@ import org.jbehave.core.annotations.AsParameters;
 @AsParameters
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class AuthorizeRequest {
 
     private String merchantid;

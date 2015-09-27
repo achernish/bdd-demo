@@ -1,0 +1,2 @@
+|merchantid|amount|currency|orderid|language|gender|lastname|street|zip|city|country|company|email|customerip|payment_method|ccn|cvc_code|cardholder_name|exp_month|exp_year|custom1|
+|gateway_test|1.00|EUR|1234-123456789-4321|de||Muster Mann|Hanauer Landstrasse|60322|Frankfurt|DEU|Inatec|aneu@natec.com|127.1.1.1|1|5232050000010003|003|Muster Mann|12|2018|123456|

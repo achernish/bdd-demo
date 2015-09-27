@@ -1,12 +1,18 @@
 package com.inatec.api.test.steps;
 
-import com.inatec.api.test.service.InatecCreditCardAPI;
-import com.inatec.api.test.service.InatecCreditCardAPIImpl;
+import com.inatec.api.test.model.AuthorizeRequest;
 import com.inatec.api.test.model.CaptureRequest;
 import com.inatec.api.test.model.Response;
+import com.inatec.api.test.service.InatecCreditCardAPI;
+import com.inatec.api.test.service.InatecCreditCardAPIImpl;
 import org.jbehave.core.annotations.BeforeStory;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -16,11 +22,9 @@ import static org.junit.Assert.assertThat;
  */
 public class CaptureTransactionSteps extends AbstractSteps {
 
-    private Response authorizeResponse;
+    private Map<AuthorizeRequest, Response> preAuthorizeResponses;
 
-    private CaptureRequest captureRequest;
-
-    private Response captureResponse;
+    private List<Response> captureResponses;
 
     private InatecCreditCardAPI inatecCreditCardAPI;
 
@@ -31,24 +35,36 @@ public class CaptureTransactionSteps extends AbstractSteps {
 
     @When("pre-authorize")
     public void whenPreAuthorize() {
-        this.authorizeResponse = inatecCreditCardAPI.authorize(this.authorizeRequest);
+        this.preAuthorizeResponses = new HashMap<>(this.authorizeRequests.size());
+
+        for (AuthorizeRequest authorizeRequest : this.authorizeRequests) {
+            this.preAuthorizeResponses.put(authorizeRequest, inatecCreditCardAPI.preAuthorize(authorizeRequest));
+        }
     }
 
     @Then("transaction has been pre-authorized")
     public void thanTransactionHasBeenPreAuthorized () {
-        assertThat(this.authorizeResponse.getStatus(), is(0));
+        for (Response response : this.preAuthorizeResponses.values()) {
+            assertThat(response.getStatus(), is(0));
+        }
     }
 
     @When("capture")
     public void whenCapture() {
-        this.captureRequest = new CaptureRequest(this.authorizeRequest.getMerchantid(),
-                this.authorizeResponse.getTransactionid(),
-                this.authorizeRequest.getLanguage());
-        this.captureResponse = inatecCreditCardAPI.capture(this.captureRequest);
+        this.captureResponses = new ArrayList<Response>(this.authorizeRequests.size());
+
+        for (Map.Entry<AuthorizeRequest, Response> entry : this.preAuthorizeResponses.entrySet()) {
+            CaptureRequest captureRequest = new CaptureRequest(entry.getKey().getMerchantid(),
+                    entry.getValue().getTransactionid(),
+                    entry.getKey().getLanguage());
+            captureResponses.add(inatecCreditCardAPI.capture(captureRequest));
+        }
     }
 
     @Then("transaction has been captured")
     public void thanTransactionHasBeenCaptured() {
-        assertThat(this.captureResponse.getStatus(), is(0));
+        for (Response response : this.captureResponses) {
+            assertThat(response.getStatus(), is(0));
+        }
     }
 }
