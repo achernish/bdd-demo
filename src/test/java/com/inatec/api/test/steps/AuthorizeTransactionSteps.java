@@ -1,15 +1,14 @@
 package com.inatec.api.test.steps;
 
-import com.inatec.api.test.model.AuthorizeRequest;
 import com.inatec.api.test.model.Response;
 import com.inatec.api.test.service.InatecCreditCardAPI;
 import com.inatec.api.test.service.InatecCreditCardAPIImpl;
 import org.jbehave.core.annotations.Then;
 import org.jbehave.core.annotations.When;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -23,11 +22,7 @@ public class AuthorizeTransactionSteps extends AbstractSteps {
     @When("authorize")
     public void whenAuthorize() {
         InatecCreditCardAPI inatecCreditCardAPI = new InatecCreditCardAPIImpl();
-
-        this.responses = new ArrayList<>(this.authorizeRequests.size());
-        for (AuthorizeRequest authorizeRequest : this.authorizeRequests) {
-            this.responses.add(inatecCreditCardAPI.authorize(authorizeRequest));
-        }
+        this.responses = this.authorizeRequests.stream().map(inatecCreditCardAPI::authorize).collect(toList());
     }
 
     @Then("transaction has been authorized")
