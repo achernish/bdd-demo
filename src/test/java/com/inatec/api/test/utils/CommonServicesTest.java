@@ -1,6 +1,5 @@
 package com.inatec.api.test.utils;
 
-import junit.framework.Assert;
 import org.junit.Test;
 
 import java.util.HashMap;

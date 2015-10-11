@@ -10,7 +10,6 @@ import javax.validation.Validation;
 import javax.validation.ValidatorFactory;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
@@ -65,32 +64,97 @@ public class AuthorisationRequest {
     @Size(min = 6, max = 6, message = "Length of SystemTraceNumber must be 6 characters long")
     private String systemTraceNumber;
 
-    private String localTransactionTime;
+    /**
+     * BM12 & BM13
+     */
+    @NotNull(message = "LocalTransactionDateTime is mandatory")
+    private Date localTransactionDateTime;
 
-    private String cardExpiryDate;
+    /**
+     * B14
+     */
+    @NotNull(message = "CardExpiryDate is mandatory")
+    private Date cardExpiryDate;
 
+    /**
+     * B18
+     */
+    @NotNull(message = "MerchantCategoryCode is mandatory")
+    @Size(min = 4, max = 4, message = "Length of MerchantCategoryCode must be 4 characters long")
     private String merchantCategoryCode;
 
+    /**
+     * BM19
+     */
+    @NotNull(message = "CountryCode is mandatory")
+    @Size(min = 3, max = 3, message = "Length of CountryCode must be 3 characters long")
     private String countryCode;
 
+    /**
+     * BM22
+     */
+    @NotNull(message = "PointOfServiceEntryMode is mandatory")
+    @Size(min = 3, max = 3, message = "Length of PointOfServiceEntryMode must be 3 characters long")
     private String pointOfServiceEntryMode;
 
+    /**
+     * BM25
+     */
+    @NotNull(message = "PosConditionCode is mandatory")
+    @Size(min = 2, max = 2, message = "Length of PosConditionCode must be 2 characters long")
     private String posConditionCode;
 
+    /**
+     * BM32
+     */
+    @NotNull(message = "AcquiringInstitutionCode is mandatory")
     private String acquiringInstitutionCode;
 
+    /**
+     * BM37
+     */
+    @NotNull(message = "RetrievalReferenceNumber is mandatory")
+    @Size(min = 12, max = 12, message = "Length of RetrievalReferenceNumber must be 12 characters long")
     private String retrievalReferenceNumber;
 
+    /**
+     * BM41
+     */
+    @NotNull(message = "TerminalID is mandatory")
+    @Size(min = 8, max = 8, message = "Length of TerminalID must be 8 characters long")
     private String terminalID;
 
+    /**
+     * BM42
+     */
+    @NotNull(message = "MerchantNumber is mandatory")
+    @Size(min = 15, max = 15, message = "Length of MerchantNumber must be 15 characters long")
     private String merchantNumber;
 
+    /**
+     * BM43
+     */
+    @NotNull(message = "CardAcceptorNameAndLocation is mandatory")
+    @Size(min = 40, max = 40, message = "Length of CardAcceptorNameAndLocation must be 40 characters long")
     private String cardAcceptorNameAndLocation;
 
+    /**
+     * BM48
+     */
+    @NotNull(message = "Cvc2 is mandatory")
     private String cvc2;
 
+    /**
+     * BM49
+     */
+    @NotNull(message = "TransactionCurrencyCode is mandatory")
+    @Size(min = 3, max = 3, message = "Length of TransactionCurrencyCode must be 3 characters long")
     private String transactionCurrencyCode;
 
+    /**
+     * BM60
+     */
+    @NotNull(message = "AdditionalData is mandatory")
     private String additionalData;
 
     @Override
@@ -113,21 +177,25 @@ public class AuthorisationRequest {
 
         rawMessage.append(systemTraceNumber);
 
+        sdf = new SimpleDateFormat("HHmmssMMdd");
+        rawMessage.append(sdf.format(localTransactionDateTime));
+
+        sdf = new SimpleDateFormat("yyMM");
+        rawMessage.append(sdf.format(cardExpiryDate));
+
+        rawMessage.append(merchantCategoryCode);
+        rawMessage.append(countryCode);
+        rawMessage.append(pointOfServiceEntryMode);
+        rawMessage.append(posConditionCode);
+        rawMessage.append(String.format("%02d", acquiringInstitutionCode.length()) + acquiringInstitutionCode);
+        rawMessage.append(retrievalReferenceNumber);
+        rawMessage.append(terminalID);
+        rawMessage.append(merchantNumber);
+        rawMessage.append(cardAcceptorNameAndLocation);
+        rawMessage.append(String.format("%03d", cvc2.length()) + cvc2);
+        rawMessage.append(transactionCurrencyCode);
+        rawMessage.append(String.format("%03d", additionalData.length()) + additionalData);
+
         return String.format("%04d", rawMessage.length()) + rawMessage.toString();
-    }
-
-    public static void main(String[] args) throws ParseException {
-        AuthorisationRequest authorisationRequest = new AuthorisationRequest();
-        authorisationRequest.setPrimaryBitmap("723c648108e18010");
-        authorisationRequest.setPrimaryAccountNumber("XXXXXXXXXXXXXXX4");
-        authorisationRequest.setProcessingCode("000000");
-        authorisationRequest.setTransactionAmount(25000);
-
-        SimpleDateFormat sdf = new SimpleDateFormat("MMddHHmmss");
-        authorisationRequest.setTransmissionDateTime(sdf.parse("1006220154"));
-
-        authorisationRequest.setSystemTraceNumber("420455");
-
-        System.out.println(authorisationRequest.toString());
     }
 }
