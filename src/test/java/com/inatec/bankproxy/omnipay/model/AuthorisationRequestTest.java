@@ -113,7 +113,6 @@ public class AuthorisationRequestTest {
         String additionalData = givenRawRequest.substring(172 + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode + lengthOfCVC2, 172 + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode + lengthOfCVC2 + lengthOfAdditionalData);
         assertThat("004400700563210", is(additionalData));
 
-        //
         AuthorisationRequest authorisationRequest = new AuthorisationRequest();
         authorisationRequest.setPrimaryBitmap(primaryBitmap);
         authorisationRequest.setPrimaryAccountNumber(primaryAccountNumber);
