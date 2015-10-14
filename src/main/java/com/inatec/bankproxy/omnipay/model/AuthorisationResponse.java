@@ -8,10 +8,6 @@ import javax.validation.constraints.Size;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.IllegalFormatException;
-
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
 
 /**
  * @author Anatoly Chernysh
@@ -21,6 +17,9 @@ public class AuthorisationResponse {
 
     public AuthorisationResponse(String rawRequest) throws ParseException {
         String msgLength = rawRequest.substring(0, 4);
+        if (!Integer.valueOf(StringUtils.stripStart(msgLength, "0")).equals(rawRequest.length() - 4)) {
+            throw new IllegalArgumentException("MessageLength is not correct.");
+        }
 
         // BM01
         String messageTypeIdentifier = rawRequest.substring(4, 8);
@@ -67,13 +66,19 @@ public class AuthorisationResponse {
         // BM37
         this.retrievalReferenceNumber = rawRequest.substring(79 + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode, 91 + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode);
 
+        // BM38
+        this.authorisationCode = rawRequest.substring(91 + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode, 97 + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode);
+
+        // BM39
+        this.responseCode = rawRequest.substring(97 + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode, 99 + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode);
+
         // BM44
-        Integer lengthOfAdditionalResponseData = Integer.valueOf(rawRequest.substring(91 + lengthOfPrimaryAccountNumber, 93 + lengthOfPrimaryAccountNumber));
-        this.additionalResponseData = rawRequest.substring(93 + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode, 93 + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode + lengthOfAdditionalResponseData);
+        Integer lengthOfAdditionalResponseData = Integer.valueOf(rawRequest.substring(99 + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode, 101 + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode));
+        this.additionalResponseData = rawRequest.substring(101 + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode, 101 + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode + lengthOfAdditionalResponseData);
 
         // BM49
-        this.transactionCurrencyCode = rawRequest.substring(93 + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode + lengthOfAdditionalResponseData,
-                96 + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode + lengthOfAdditionalResponseData);
+        this.transactionCurrencyCode = rawRequest.substring(101 + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode + lengthOfAdditionalResponseData,
+                104 + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode + lengthOfAdditionalResponseData);
     }
 
     /**
