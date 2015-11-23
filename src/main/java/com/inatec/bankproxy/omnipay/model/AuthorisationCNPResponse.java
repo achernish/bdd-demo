@@ -13,9 +13,9 @@ import java.util.Date;
  * @author Anatoly Chernysh
  */
 @Data
-public class AuthorisationResponse {
+public class AuthorisationCNPResponse {
 
-    public AuthorisationResponse(String rawRequest) throws ParseException {
+    public AuthorisationCNPResponse(String rawRequest) throws ParseException {
         String msgLength = rawRequest.substring(0, 4);
         if (!Integer.valueOf(StringUtils.stripStart(msgLength, "0")).equals(rawRequest.length() - 4)) {
             throw new IllegalArgumentException("MessageLength is not correct.");

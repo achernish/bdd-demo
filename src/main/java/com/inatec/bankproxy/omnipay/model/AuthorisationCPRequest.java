@@ -21,7 +21,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthorisationRequest {
+public class AuthorisationCPRequest {
 
     /**
      * BM01
@@ -71,7 +71,7 @@ public class AuthorisationRequest {
     private Date localTransactionDateTime;
 
     /**
-     * B14
+     * B14*
      */
     @NotNull(message = "CardExpiryDate is mandatory")
     private Date cardExpiryDate;
@@ -111,6 +111,11 @@ public class AuthorisationRequest {
     private String acquiringInstitutionCode;
 
     /**
+     * BM35
+     */
+
+
+    /**
      * BM37
      */
     @NotNull(message = "RetrievalReferenceNumber is mandatory")
@@ -139,10 +144,8 @@ public class AuthorisationRequest {
     private String cardAcceptorNameAndLocation;
 
     /**
-     * BM48
+     * BM45*
      */
-    @NotNull(message = "Cvc2 is mandatory")
-    private String cvc2;
 
     /**
      * BM49
@@ -152,15 +155,13 @@ public class AuthorisationRequest {
     private String transactionCurrencyCode;
 
     /**
-     * BM60
+     * BM55
      */
-    @NotNull(message = "AdditionalData is mandatory")
-    private String additionalData;
 
     @Override
     public String toString() {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        Set<ConstraintViolation<AuthorisationRequest>> violations = factory.getValidator().validate(this);
+        Set<ConstraintViolation<AuthorisationCPRequest>> violations = factory.getValidator().validate(this);
         if (!violations.isEmpty()) {
             throw new ConstraintViolationException(new HashSet<ConstraintViolation<?>>(violations));
         }
@@ -192,9 +193,16 @@ public class AuthorisationRequest {
         rawMessage.append(terminalID);
         rawMessage.append(merchantNumber);
         rawMessage.append(cardAcceptorNameAndLocation);
+
+        /*
         rawMessage.append(String.format("%03d", cvc2.length()) + cvc2);
+        */
+
         rawMessage.append(transactionCurrencyCode);
+
+        /*
         rawMessage.append(String.format("%03d", additionalData.length()) + additionalData);
+        */
 
         return String.format("%04d", rawMessage.length()) + rawMessage.toString();
     }
