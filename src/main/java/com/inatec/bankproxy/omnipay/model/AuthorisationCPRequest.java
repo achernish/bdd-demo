@@ -21,7 +21,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthorisationCPRequest {
+public class AuthorisationCPRequest extends Request {
 
     /**
      * BM01
@@ -98,6 +98,13 @@ public class AuthorisationCPRequest {
     private String pointOfServiceEntryMode;
 
     /**
+     * BM23
+     */
+    @NotNull(message = "CardSequenceNumber is mandatory")
+    @Size(min = 3, max = 3, message = "Length of CardSequenceNumber must be 3 characters long")
+    private String сardSequenceNumber;
+
+    /**
      * BM25
      */
     @NotNull(message = "PosConditionCode is mandatory")
@@ -146,6 +153,7 @@ public class AuthorisationCPRequest {
     /**
      * BM45*
      */
+    private String track1Data;
 
     /**
      * BM49

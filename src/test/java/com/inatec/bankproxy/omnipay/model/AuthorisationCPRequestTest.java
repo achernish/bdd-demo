@@ -17,7 +17,7 @@ public class AuthorisationCPRequestTest {
 
     @Test
     public void authorisationRequestIsCorrect() throws ParseException {
-        String givenRawRequest = "043601007238668128E082001654133300890000130000000000000004000427130751080761080751042760843720510010006000007365413330089000013=110600000000000000090990708065122334499000100769629355OmniPay Test             DUBLIN           IE9782125F2A02097882021A2B95051A2B3C4D5F9A030904099C01009F02060000000199999F03060000000000009F1006010003A410009F1A0205289F1E0831323334353637389F26080123456789ABCDEF9F2701CC9F3303E0E8809F34030000009F3602C3D49F3704CCDDEEFF";
+        String givenRawRequest = "043601007238668128E082001654133300890000130000000000000004000427130751080761080751042760843720510010006000007365413330089000013=110600000000000000090990708065122334499000100769629355OmniPay Test             DUBLIN            IE9782125F2A02097882021A2B95051A2B3C4D5F9A030904099C01009F02060000000199999F03060000000000009F1006010003A410009F1A0205289F1E0831323334353637389F26080123456789ABCDEF9F2701CC9F3303E0E8809F34030000009F3602C3D49F3704CCDDEEFF";
 
         String msgLength = givenRawRequest.substring(0, 4);
         assertThat("0436", is(msgLength));
@@ -71,40 +71,52 @@ public class AuthorisationCPRequestTest {
         String merchantCategoryCode = givenRawRequest.substring(70 + lengthOfCardExpiryDate + lengthOfPrimaryAccountNumber, 74 + lengthOfCardExpiryDate + lengthOfPrimaryAccountNumber);
         assertThat("6084", is(merchantCategoryCode));
 
-            /*
-
         // BM19
-        String countryCode = givenRawRequest.substring(78 + lengthOfPrimaryAccountNumber, 81 + lengthOfPrimaryAccountNumber);
-        assertThat("276", is(countryCode));
+        String countryCode = givenRawRequest.substring(74 + lengthOfCardExpiryDate + lengthOfPrimaryAccountNumber, 77 + lengthOfCardExpiryDate + lengthOfPrimaryAccountNumber);
+        assertThat("372", is(countryCode));
 
         // BM22
-        String pointOfServiceEntryMode = givenRawRequest.substring(81 + lengthOfPrimaryAccountNumber, 84 + lengthOfPrimaryAccountNumber);
-        assertThat("812", is(pointOfServiceEntryMode));
+        String pointOfServiceEntryMode = givenRawRequest.substring(77 + lengthOfCardExpiryDate + lengthOfPrimaryAccountNumber, 80 + lengthOfCardExpiryDate + lengthOfPrimaryAccountNumber);
+        assertThat("051", is(pointOfServiceEntryMode));
+
+        // BM23
+        String cardSequenceNumber = givenRawRequest.substring(80 + lengthOfCardExpiryDate + lengthOfPrimaryAccountNumber, 83 + lengthOfCardExpiryDate + lengthOfPrimaryAccountNumber);
+        assertThat("001", is(cardSequenceNumber));
 
         // BM25
-        String posConditionCode = givenRawRequest.substring(84 + lengthOfPrimaryAccountNumber, 86 + lengthOfPrimaryAccountNumber);
-        assertThat("80", is(posConditionCode));
+        String posConditionCode = givenRawRequest.substring(83 + lengthOfCardExpiryDate + lengthOfPrimaryAccountNumber, 85 + lengthOfCardExpiryDate + lengthOfPrimaryAccountNumber);
+        assertThat("00", is(posConditionCode));
 
         // BM32
-        Integer lengthOfAcquiringInstitutionCode = Integer.valueOf(givenRawRequest.substring(86 + lengthOfPrimaryAccountNumber, 88 + lengthOfPrimaryAccountNumber));
-        String acquiringInstitutionCode = givenRawRequest.substring(88 + lengthOfPrimaryAccountNumber, 88 + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode);
-        assertThat("000048", is(acquiringInstitutionCode));
+        Integer lengthOfAcquiringInstitutionCode = Integer.valueOf(givenRawRequest.substring(85 + lengthOfCardExpiryDate + lengthOfPrimaryAccountNumber, 87 + lengthOfCardExpiryDate + lengthOfPrimaryAccountNumber));
+        String acquiringInstitutionCode = givenRawRequest.substring(87 + lengthOfCardExpiryDate + lengthOfPrimaryAccountNumber, 87 + lengthOfCardExpiryDate + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode);
+        assertThat("000007", is(acquiringInstitutionCode));
 
         // BM37
-        String retrievalReferenceNumber = givenRawRequest.substring(88 + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode, 100 + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode);
-        assertThat("527922420455", is(retrievalReferenceNumber));
+        String retrievalReferenceNumber = givenRawRequest.substring(87 + lengthOfCardExpiryDate + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode, 99 + lengthOfCardExpiryDate + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode);
+        assertThat("365413330089", is(retrievalReferenceNumber));
 
         // BM41
-        String terminalID = givenRawRequest.substring(100 + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode, 108 + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode);
-        assertThat("PC21PAY4", is(terminalID));
+        String terminalID = givenRawRequest.substring(99 + lengthOfCardExpiryDate + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode,
+                107 + lengthOfCardExpiryDate + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode);
+        assertThat("000013=1", is(terminalID));
 
         // BM42
-        String merchantNumber = givenRawRequest.substring(108 + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode, 123 + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode);
-        assertThat("010010007700100", is(merchantNumber));
+        String merchantNumber = givenRawRequest.substring(107 + lengthOfCardExpiryDate + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode,
+                122 + lengthOfCardExpiryDate + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode);
+        assertThat("106000000000000", is(merchantNumber));
 
         // BM43
-        String cardAcceptorNameAndLocation = givenRawRequest.substring(123 + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode, 163 + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode);
-        assertThat("BigOption               XXXXXXXXX6695 GB", is(cardAcceptorNameAndLocation));
+        String cardAcceptorNameAndLocation = givenRawRequest.substring(122 + lengthOfCardExpiryDate + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode,
+                162 + lengthOfCardExpiryDate + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode);
+        assertThat("00090990708065122334499000100769629355Om", is(cardAcceptorNameAndLocation));
+
+        // BM45
+        Integer lengthOfTrack1Data = Integer.valueOf(givenRawRequest.substring(162 + lengthOfCardExpiryDate + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode,
+                164 + lengthOfCardExpiryDate + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode));
+        System.out.println();
+
+            /*
 
         // BM48
         Integer lengthOfCVC2 = Integer.valueOf(givenRawRequest.substring(163 + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode, 166 + lengthOfPrimaryAccountNumber + lengthOfAcquiringInstitutionCode));
@@ -140,5 +152,13 @@ public class AuthorisationCPRequestTest {
         }
 
         authorisationCPRequest.setMerchantCategoryCode(merchantCategoryCode);
+
+        authorisationCPRequest.setCountryCode(countryCode);
+        authorisationCPRequest.setPointOfServiceEntryMode(pointOfServiceEntryMode);
+        authorisationCPRequest.setСardSequenceNumber(cardSequenceNumber);
+        authorisationCPRequest.setAcquiringInstitutionCode(acquiringInstitutionCode);
+        authorisationCPRequest.setRetrievalReferenceNumber(retrievalReferenceNumber);
+        authorisationCPRequest.setMerchantNumber(merchantNumber);
+        authorisationCPRequest.setCardAcceptorNameAndLocation(cardAcceptorNameAndLocation);
     }
 }

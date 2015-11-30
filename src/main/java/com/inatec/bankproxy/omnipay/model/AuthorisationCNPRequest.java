@@ -21,7 +21,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthorisationCNPRequest {
+public class AuthorisationCNPRequest extends Request {
 
     /**
      * BM01
@@ -61,7 +61,7 @@ public class AuthorisationCNPRequest {
      * BM11
      */
     @NotNull(message = "SystemTraceNumber is mandatory")
-    @Size(min = 6, max = 6, message = "Length of SystemTraceNumber must be 6 characters long")
+    @Size(min = 6, message = "Length of SystemTraceNumber must be 6 characters long")
     private String systemTraceNumber;
 
     /**
